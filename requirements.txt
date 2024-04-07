@@ -1,0 +1,6 @@
+requests~=2.31.0
+json
+pillow~=9.5.0
+numpy~=1.26.3
+torch~=2.3.0.dev20240304
+torchvision~=0.18.0.dev20240304
