@@ -94,6 +94,7 @@ class AnyTextAPI_Node:
                 "api_key": ("STRING", {"default": "sk-"}),
                 "image_width": ("INT", {"default": 512, "min": 64, "max": 7000}),
                 "image_height": ("INT", {"default": 512, "min": 64, "max": 7000}),
+                "max_retries": ("INT", {"default": 100, "min": 1, "max": 1000}),
             },
         }
 
@@ -103,7 +104,7 @@ class AnyTextAPI_Node:
     FUNCTION = "execute"
 
     def execute(self, prompt, mask_image_url, base_image_url, appended_prompt, negative_prompt, layout_priority, steps,
-                seed, api_key, image_width, image_height):
+                seed, api_key, image_width, image_height, max_retries):
         print('Requesting image generation')
         params = {
             "input": {
@@ -135,7 +136,6 @@ class AnyTextAPI_Node:
         api_key = params['api_key']
         task_id = send_request(params['input'], params['parameters'], api_key)
         loop = True
-        max_retries = 100
         while loop and max_retries > 0:
             try:
                 response = requests.get(
