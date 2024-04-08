@@ -92,6 +92,8 @@ class AnyTextAPI_Node:
                 "steps": ("INT", {"default": 20, "min": 1, "max": 100}),
                 "seed": ("INT", {"default": -1, "min": -1, "max": 99999999}),
                 "api_key": ("STRING", {"default": "sk-"}),
+                "image_width": ("INT", {"default": 512, "min": 64, "max": 7000}),
+                "image_height": ("INT", {"default": 512, "min": 64, "max": 7000}),
             },
         }
 
@@ -101,7 +103,7 @@ class AnyTextAPI_Node:
     FUNCTION = "execute"
 
     def execute(self, prompt, mask_image_url, base_image_url, appended_prompt, negative_prompt, layout_priority, steps,
-                seed, api_key):
+                seed, api_key, image_width, image_height):
         print('Requesting image generation')
         params = {
             "input": {
@@ -133,7 +135,8 @@ class AnyTextAPI_Node:
         api_key = params['api_key']
         task_id = send_request(params['input'], params['parameters'], api_key)
         loop = True
-        while loop:
+        max_retries = 10
+        while loop and max_retries > 0:
             try:
                 response = requests.get(
                     url="https://dashscope.aliyuncs.com/api/v1/tasks/" + task_id,
@@ -162,6 +165,10 @@ class AnyTextAPI_Node:
                     print('Task is still running')
                 # 延迟1秒
                 time.sleep(1)
+                max_retries -= 1
+                if max_retries == 0:
+                    print('Max retries reached')
+                    return None
             except requests.exceptions.RequestException:
                 print('HTTP Request failed')
 
