@@ -135,7 +135,7 @@ class AnyTextAPI_Node:
         api_key = params['api_key']
         task_id = send_request(params['input'], params['parameters'], api_key)
         loop = True
-        max_retries = 10
+        max_retries = 100
         while loop and max_retries > 0:
             try:
                 response = requests.get(
