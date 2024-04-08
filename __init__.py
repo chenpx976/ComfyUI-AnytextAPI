@@ -91,7 +91,7 @@ class AnyTextAPI_Node:
                 "layout_priority": (["vertical", "horizontal"], {"default": "vertical"}),
                 "steps": ("INT", {"default": 20, "min": 1, "max": 100}),
                 "seed": ("INT", {"default": -1, "min": -1, "max": 99999999}),
-                "api_key": ("STRING", {"forceInput": True}),
+                "api_key": ("STRING",),
             },
         }
 
